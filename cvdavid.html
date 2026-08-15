@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cîrdei David-Andrei — CV</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg2: #0b1728;
+      --text: #f5f7fb;
+      --muted: #aab7c8;
+      --accent: #62d9ff;
+      --accent2: #8d7cff;
+      --line: rgba(255,255,255,.11);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(98,217,255,.12), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(141,124,255,.13), transparent 30%),
+        linear-gradient(135deg, var(--bg), var(--bg2));
+    }
+
+    nav {
+      position: fixed;
+      z-index: 20;
+      top: 18px;
+      left: 50%;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      width: min(760px, calc(100% - 32px));
+      padding: 7px;
+      transform: translateX(-50%);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(7,17,31,.62);
+      backdrop-filter: blur(18px);
+    }
+    nav a {
+      padding: 9px 15px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: .25s;
+    }
+    nav a:hover { color: var(--text); background: rgba(255,255,255,.08); }
+
+    .wrap {
+      width: min(1040px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+    .hero {
+      display: grid;
+      min-height: min(92vh, 900px);
+      padding: 132px 0 88px;
+      place-items: center;
+    }
+    .hero-inner { max-width: 820px; text-align: center; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 13px;
+      border: 1px solid rgba(98,217,255,.2);
+      border-radius: 999px;
+      background: rgba(98,217,255,.06);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 18px var(--accent); animation: pulse 1.8s infinite;
+    }
+    h1 {
+      margin: 22px 0 17px;
+      background: linear-gradient(100deg, #fff 20%, #bfeeff 48%, #b8aaff 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-size: clamp(46px, 7vw, 82px);
+      letter-spacing: -.055em;
+      line-height: .96;
+    }
+    .role {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: .42em;
+      min-height: 1.7em;
+      margin: 0;
+      color: #d9e4ef;
+      font-size: clamp(19px, 2.2vw, 24px);
+      line-height: 1.4;
+    }
+    .role-static { white-space: nowrap; }
+    .typing-wrap {
+      display: inline-flex;
+      align-items: baseline;
+      min-width: 25ch;
+      color: var(--accent);
+      text-align: left;
+    }
+    .typed { white-space: nowrap; }
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: .95em;
+      margin-left: 3px;
+      background: var(--accent);
+      animation: blink .8s infinite;
+    }
+    .intro {
+      max-width: 61ch;
+      margin: 24px auto 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+      text-wrap: balance;
+    }
+    .actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .btn {
+      padding: 13px 20px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255,255,255,.055);
+      color: var(--text);
+      text-decoration: none;
+      transition: .25s;
+    }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(98,217,255,.14); }
+    .btn.primary { border: 0; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #06101c; font-weight: 800; }
+
+    main { padding-bottom: 38px; }
+    section { padding: 66px 0; }
+    .section-head {
+      display: grid;
+      gap: 10px;
+      max-width: 640px;
+      margin-bottom: 28px;
+    }
+    .section-head h2 { margin: 0; font-size: clamp(29px, 3vw, 36px); letter-spacing: -.035em; }
+    .section-head p {
+      max-width: 52ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card {
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+      box-shadow: 0 25px 80px rgba(0,0,0,.35);
+      transition: transform .35s ease, border-color .35s ease;
+    }
+    .card:hover { transform: translateY(-6px); border-color: rgba(98,217,255,.28); }
+    .card h3 { margin: 0 0 6px; font-size: 18px; }
+    .item { padding: 19px 0; border-top: 1px solid var(--line); }
+    .item:first-of-type { border-top: 0; }
+    .item-title { margin-bottom: 7px; font-size: 16px; font-weight: 750; line-height: 1.35; }
+    .item p { max-width: 58ch; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.68; }
+    .skill { margin: 18px 0; }
+    .skill-top { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 8px; font-size: 14px; }
+    .skill-top span:last-child { color: var(--accent); }
+    .bar { height: 7px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.07); }
+    .fill {
+      position: relative;
+      width: 0;
+      height: 100%;
+      overflow: hidden;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 14px rgba(98,217,255,.42);
+      transition: width 1.75s cubic-bezier(.16, 1, .3, 1);
+    }
+    .fill::after {
+      position: absolute;
+      top: 0;
+      left: -42%;
+      width: 26%;
+      height: 100%;
+      content: "";
+      opacity: 0;
+      transform: skewX(-24deg);
+      background: rgba(255,255,255,.78);
+    }
+    .reveal.visible .fill::after { animation: fill-sheen .9s ease-out .65s both; }
+    .contact { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .contact a {
+      display: grid; gap: 7px; min-width: 0; padding: 21px; border: 1px solid var(--line); border-radius: 18px;
+      background: rgba(255,255,255,.045); color: var(--text); overflow-wrap: anywhere; text-decoration: none; transition: .25s;
+    }
+    .contact a:hover { border-color: rgba(98,217,255,.3); transform: translateY(-3px); }
+    .contact small { color: var(--accent); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    footer { padding: 30px 24px 42px; color: var(--muted); font-size: 13px; text-align: center; }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .75s ease, transform .75s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    @keyframes pulse { 50% { transform: scale(1.45); opacity: .55; } }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes fill-sheen { 0% { left: -42%; opacity: 0; } 15% { opacity: .7; } 100% { left: 120%; opacity: 0; } }
+    @media (min-width: 1400px) { .wrap { width: min(1080px, calc(100% - 96px)); } section { padding: 74px 0; } }
+    @media (max-width: 760px) {
+      nav { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+      nav::-webkit-scrollbar { display: none; }
+      nav a { flex: 0 0 auto; padding-inline: 12px; }
+      .wrap { width: min(100% - 32px, 620px); }
+      .hero { min-height: 100svh; padding: 116px 0 64px; }
+      .role { flex-wrap: wrap; gap: 0 .32em; }
+      .typing-wrap { min-width: 23ch; }
+      .grid, .contact { grid-template-columns: 1fr; }
+      .section-head { gap: 12px; }
+      section { padding: 48px 0; }
+      .card { padding: 23px; }
+    }
+    @media (max-width: 430px) {
+      .eyebrow { font-size: 10px; letter-spacing: .11em; }
+      .role { font-size: 18px; }
+      .role-static { width: 100%; }
+      .typing-wrap { min-width: 22ch; justify-content: center; }
+      .intro { font-size: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+    @media print { nav, .actions { display: none; } body { background: #fff; color: #111; } .hero { min-height: auto; padding: 40px 0 15px; } .card, .contact a { box-shadow: none; background: #fff; border-color: #ccc; } .reveal { opacity: 1; transform: none; } .fill { width: var(--print-width, 0) !important; } }
+  </style>
+</head>
+<body>
+  <nav aria-label="Navigare principală">
+    <a href="#despre">Despre</a><a href="#calitati">Calități</a><a href="#competente">Competențe</a><a href="#experienta">Experiență</a><a href="#contact">Contact</a>
+  </nav>
+  <header class="hero" id="despre">
+    <div class="wrap hero-inner reveal">
+      <div class="eyebrow"><span class="dot"></span>Disponibil pentru oportunități</div>
+      <h1>CÎRDEI DAVID-ANDREI</h1>
+      <p class="role"><span class="role-static">Organizat · Motivat ·</span><span class="typing-wrap"><span class="typed" id="typed" aria-live="polite"></span><span class="cursor" aria-hidden="true"></span></span></p>
+      <p class="intro">Am 20 de ani și caut un loc de muncă stabil și de lungă durată, în program de 8h, 6h sau 4h. Sunt de asemenea deschis la colaborări pe proiecte scurte sau freelancing.</p>
+      <div class="actions"><a class="btn primary" href="#contact">Contactează-mă →</a><a class="btn" href="javascript:window.print()">Descarcă / Printează CV</a></div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section id="calitati" class="reveal">
+      <div class="section-head"><h2>Calități</h2><p>Lucrez responsabil, învăț repede și mă adaptez ușor la cerințele unui proiect sau ale unei echipe.</p></div>
+      <div class="grid">
+        <article class="card"><h3>01 — Seriozitate</h3><div class="item"><div class="item-title">Persoană organizată, serioasă și de încredere</div><p>Abordez responsabil orice sarcină și respect termenele stabilite.</p></div><div class="item"><div class="item-title">Atenție la detalii</div><p>Îmi place să verific munca înainte de livrare și să păstrez lucrurile clare și ordonate.</p></div></article>
+        <article class="card"><h3>02 — Adaptabilitate</h3><div class="item"><div class="item-title">Capacitate foarte bună de învățare</div><p>Învăț rapid lucruri noi și mă adaptez ușor la cerințele proiectelor.</p></div><div class="item"><div class="item-title">Comunicare</div><p>Comunic clar și eficient, atât în echipă, cât și în relația cu clienții.</p></div></article>
+      </div>
+    </section>
+    <section id="competente" class="reveal">
+      <div class="section-head"><h2>Competențe</h2><p>Instrumente digitale, limba engleză, AI și design grafic.</p></div>
+      <div class="grid">
+        <article class="card"><h3>Digital &amp; Office</h3><div class="skill"><div class="skill-top"><span>Google Sheets</span><span>85%</span></div><div class="bar"><div class="fill" data-width="85%"></div></div></div><div class="skill"><div class="skill-top"><span>Microsoft Excel</span><span>85%</span></div><div class="bar"><div class="fill" data-width="85%"></div></div></div><div class="skill"><div class="skill-top"><span>Google Docs / Word</span><span>80%</span></div><div class="bar"><div class="fill" data-width="80%"></div></div></div></article>
+        <article class="card"><h3>Creative &amp; AI</h3><div class="skill"><div class="skill-top"><span>Limba engleză</span><span>100%</span></div><div class="bar"><div class="fill" data-width="100%"></div></div></div><div class="item"><div class="item-title">Inteligență Artificială (AI)</div><p>Experiență în utilizarea tool-urilor AI pentru a crește eficiența și calitatea muncii.</p></div><div class="item"><div class="item-title">Design grafic</div><p>Crearea de materiale pentru social media — postări și bannere.</p></div></article>
+      </div>
+    </section>
+    <section id="experienta" class="reveal">
+      <div class="section-head"><h2>Profil profesional</h2></div>
+      <article class="card"><div class="item"><div class="item-title">Rolul potrivit</div><p>Sunt interesat de poziții în care pot folosi organizarea, lucrul cu documente și foi de calcul, comunicarea, instrumentele AI și abilitățile creative.</p></div><div class="item"><div class="item-title">Program flexibil</div><p>Disponibil pentru program de 8h, 6h sau 4h.</p></div><div class="item"><div class="item-title">Colaborări</div><p>Deschis la proiecte scurte și freelancing.</p></div></article>
+    </section>
+    <section id="contact" class="reveal">
+      <div class="section-head"><h2>Hai să discutăm</h2><p>Pentru o oportunitate de angajare sau colaborare, mă poți contacta direct.</p></div>
+      <div class="contact"><a href="mailto:davidflakesa@gmail.com"><small>Email</small>davidflakesa@gmail.com</a><a href="#"><small>Facebook</small>David Flake</a><a href="tel:0771646376"><small>Telefon</small>0 771 646 376</a></div>
+    </section>
+  </main>
+  <footer>© 2026 Cirdei David-Andrei · CV Online</footer>
+  <script>
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      entry.target.querySelectorAll('.fill').forEach(fill => { fill.style.width = fill.dataset.width; fill.style.setProperty('--print-width', fill.dataset.width); });
+      observer.unobserve(entry.target);
+    }), { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
+
+    const words = ['dedicat', 'responsabil', 'adaptabil', 'orientat spre rezultate'];
+    const typed = document.getElementById('typed');
+    let wordIndex = 0, characterIndex = 0, deleting = false;
+    function type() {
+      const word = words[wordIndex];
+      typed.textContent = deleting ? word.slice(0, characterIndex--) : word.slice(0, characterIndex++);
+      let delay = deleting ? 45 : 85;
+      if (!deleting && characterIndex > word.length) { deleting = true; delay = 1200; }
+      if (deleting && characterIndex < 0) { deleting = false; wordIndex = (wordIndex + 1) % words.length; characterIndex = 0; delay = 350; }
+      window.setTimeout(type, delay);
+    }
+    type();
+
+  </script>
+</body>
+</html>
