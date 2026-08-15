@@ -1,310 +1,537 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cîrdei David-Andrei — CV</title>
-  <style>
-    :root {
-      --bg: #07111f;
-      --bg2: #0b1728;
-      --text: #f5f7fb;
-      --muted: #aab7c8;
-      --accent: #62d9ff;
-      --accent2: #8d7cff;
-      --line: rgba(255,255,255,.11);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Snake</title>
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #11182b;
+    --panel2: #18223a;
+    --text: #f4f7ff;
+    --muted: #9aa7c2;
+    --accent: #65e572;
+    --accent2: #b4ff73;
+    --danger: #ff5d73;
+    --grid: rgba(255,255,255,.045);
+  }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      min-width: 320px;
-      overflow-x: hidden;
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 15% 15%, rgba(98,217,255,.12), transparent 30%),
-        radial-gradient(circle at 85% 20%, rgba(141,124,255,.13), transparent 30%),
-        linear-gradient(135deg, var(--bg), var(--bg2));
-    }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    color: var(--text);
+    background:
+      radial-gradient(circle at 50% 0%, rgba(101,229,114,.10), transparent 35%),
+      var(--bg);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
 
-    nav {
-      position: fixed;
-      z-index: 20;
-      top: 18px;
-      left: 50%;
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-      width: min(760px, calc(100% - 32px));
-      padding: 7px;
-      transform: translateX(-50%);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(7,17,31,.62);
-      backdrop-filter: blur(18px);
-    }
-    nav a {
-      padding: 9px 15px;
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 13px;
-      text-decoration: none;
-      transition: .25s;
-    }
-    nav a:hover { color: var(--text); background: rgba(255,255,255,.08); }
+  .game {
+    width: min(94vw, 620px);
+  }
 
-    .wrap {
-      width: min(1040px, calc(100% - 48px));
-      margin-inline: auto;
-    }
-    .hero {
-      display: grid;
-      min-height: min(92vh, 900px);
-      padding: 132px 0 88px;
-      place-items: center;
-    }
-    .hero-inner { max-width: 820px; text-align: center; }
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 8px 13px;
-      border: 1px solid rgba(98,217,255,.2);
-      border-radius: 999px;
-      background: rgba(98,217,255,.06);
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-    .dot {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
-      box-shadow: 0 0 18px var(--accent); animation: pulse 1.8s infinite;
-    }
-    h1 {
-      margin: 22px 0 17px;
-      background: linear-gradient(100deg, #fff 20%, #bfeeff 48%, #b8aaff 80%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-size: clamp(46px, 7vw, 82px);
-      letter-spacing: -.055em;
-      line-height: .96;
-    }
-    .role {
-      display: flex;
-      align-items: baseline;
-      justify-content: center;
-      gap: .42em;
-      min-height: 1.7em;
-      margin: 0;
-      color: #d9e4ef;
-      font-size: clamp(19px, 2.2vw, 24px);
-      line-height: 1.4;
-    }
-    .role-static { white-space: nowrap; }
-    .typing-wrap {
-      display: inline-flex;
-      align-items: baseline;
-      min-width: 25ch;
-      color: var(--accent);
-      text-align: left;
-    }
-    .typed { white-space: nowrap; }
-    .cursor {
-      display: inline-block;
-      width: 2px;
-      height: .95em;
-      margin-left: 3px;
-      background: var(--accent);
-      animation: blink .8s infinite;
-    }
-    .intro {
-      max-width: 61ch;
-      margin: 24px auto 0;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.75;
-      text-wrap: balance;
-    }
-    .actions {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 30px;
-    }
-    .btn {
-      padding: 13px 20px;
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      background: rgba(255,255,255,.055);
-      color: var(--text);
-      text-decoration: none;
-      transition: .25s;
-    }
-    .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(98,217,255,.14); }
-    .btn.primary { border: 0; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #06101c; font-weight: 800; }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
 
-    main { padding-bottom: 38px; }
-    section { padding: 66px 0; }
-    .section-head {
-      display: grid;
-      gap: 10px;
-      max-width: 640px;
-      margin-bottom: 28px;
-    }
-    .section-head h2 { margin: 0; font-size: clamp(29px, 3vw, 36px); letter-spacing: -.035em; }
-    .section-head p {
-      max-width: 52ch;
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.65;
-      text-wrap: pretty;
-    }
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-    .card {
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
-      box-shadow: 0 25px 80px rgba(0,0,0,.35);
-      transition: transform .35s ease, border-color .35s ease;
-    }
-    .card:hover { transform: translateY(-6px); border-color: rgba(98,217,255,.28); }
-    .card h3 { margin: 0 0 6px; font-size: 18px; }
-    .item { padding: 19px 0; border-top: 1px solid var(--line); }
-    .item:first-of-type { border-top: 0; }
-    .item-title { margin-bottom: 7px; font-size: 16px; font-weight: 750; line-height: 1.35; }
-    .item p { max-width: 58ch; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.68; }
-    .skill { margin: 18px 0; }
-    .skill-top { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 8px; font-size: 14px; }
-    .skill-top span:last-child { color: var(--accent); }
-    .bar { height: 7px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.07); }
-    .fill {
-      position: relative;
-      width: 0;
-      height: 100%;
-      overflow: hidden;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      box-shadow: 0 0 14px rgba(98,217,255,.42);
-      transition: width 1.75s cubic-bezier(.16, 1, .3, 1);
-    }
-    .fill::after {
-      position: absolute;
-      top: 0;
-      left: -42%;
-      width: 26%;
-      height: 100%;
-      content: "";
-      opacity: 0;
-      transform: skewX(-24deg);
-      background: rgba(255,255,255,.78);
-    }
-    .reveal.visible .fill::after { animation: fill-sheen .9s ease-out .65s both; }
-    .contact { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-    .contact a {
-      display: grid; gap: 7px; min-width: 0; padding: 21px; border: 1px solid var(--line); border-radius: 18px;
-      background: rgba(255,255,255,.045); color: var(--text); overflow-wrap: anywhere; text-decoration: none; transition: .25s;
-    }
-    .contact a:hover { border-color: rgba(98,217,255,.3); transform: translateY(-3px); }
-    .contact small { color: var(--accent); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
-    footer { padding: 30px 24px 42px; color: var(--muted); font-size: 13px; text-align: center; }
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .75s ease, transform .75s ease; }
-    .reveal.visible { opacity: 1; transform: none; }
-    @keyframes pulse { 50% { transform: scale(1.45); opacity: .55; } }
-    @keyframes blink { 50% { opacity: 0; } }
-    @keyframes fill-sheen { 0% { left: -42%; opacity: 0; } 15% { opacity: .7; } 100% { left: 120%; opacity: 0; } }
-    @media (min-width: 1400px) { .wrap { width: min(1080px, calc(100% - 96px)); } section { padding: 74px 0; } }
-    @media (max-width: 760px) {
-      nav { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
-      nav::-webkit-scrollbar { display: none; }
-      nav a { flex: 0 0 auto; padding-inline: 12px; }
-      .wrap { width: min(100% - 32px, 620px); }
-      .hero { min-height: 100svh; padding: 116px 0 64px; }
-      .role { flex-wrap: wrap; gap: 0 .32em; }
-      .typing-wrap { min-width: 23ch; }
-      .grid, .contact { grid-template-columns: 1fr; }
-      .section-head { gap: 12px; }
-      section { padding: 48px 0; }
-      .card { padding: 23px; }
-    }
-    @media (max-width: 430px) {
-      .eyebrow { font-size: 10px; letter-spacing: .11em; }
-      .role { font-size: 18px; }
-      .role-static { width: 100%; }
-      .typing-wrap { min-width: 22ch; justify-content: center; }
-      .intro { font-size: 16px; }
-    }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
-    @media print { nav, .actions { display: none; } body { background: #fff; color: #111; } .hero { min-height: auto; padding: 40px 0 15px; } .card, .contact a { box-shadow: none; background: #fff; border-color: #ccc; } .reveal { opacity: 1; transform: none; } .fill { width: var(--print-width, 0) !important; } }
-  </style>
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 7vw, 42px);
+    letter-spacing: -1px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 8px;
+  }
+
+  .stat {
+    min-width: 78px;
+    padding: 8px 12px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    background: rgba(17,24,43,.85);
+  }
+
+  .stat span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .stat strong { font-size: 20px; }
+
+  .board-wrap {
+    position: relative;
+    padding: 10px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #1b2945, #0d1528);
+    box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background-color: #0b1222;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 5% 5%;
+    touch-action: none;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 10px;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(5, 9, 18, .72);
+    backdrop-filter: blur(5px);
+    text-align: center;
+  }
+
+  .overlay.hidden { display: none; }
+
+  .message h2 {
+    margin: 0 0 8px;
+    font-size: clamp(30px, 8vw, 48px);
+  }
+
+  .message p {
+    margin: 0 0 18px;
+    color: var(--muted);
+  }
+
+  button {
+    border: 0;
+    color: #071008;
+    background: var(--accent);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .12s ease, filter .12s ease;
+  }
+
+  button:hover { filter: brightness(1.08); }
+  button:active { transform: scale(.96); }
+
+  .primary {
+    padding: 12px 22px;
+    border-radius: 12px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .hint {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .pause {
+    padding: 9px 13px;
+    border-radius: 10px;
+    color: var(--text);
+    background: var(--panel2);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+
+  .dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 58px);
+    grid-template-rows: repeat(2, 52px);
+    gap: 6px;
+    width: max-content;
+    margin: 18px auto 0;
+  }
+
+  .dpad button {
+    border-radius: 12px;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,.08);
+    font-size: 22px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .up { grid-column: 2; }
+  .left { grid-column: 1; grid-row: 2; }
+  .down { grid-column: 2; grid-row: 2; }
+  .right { grid-column: 3; grid-row: 2; }
+
+  @media (min-width: 700px) {
+    .dpad { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 12px; }
+    header { align-items: flex-start; }
+    .stat { min-width: 68px; padding: 7px 9px; }
+    .hint { font-size: 12px; }
+  }
+</style>
 </head>
 <body>
-  <nav aria-label="Navigare principală">
-    <a href="#despre">Despre</a><a href="#calitati">Calități</a><a href="#competente">Competențe</a><a href="#experienta">Experiență</a><a href="#contact">Contact</a>
-  </nav>
-  <header class="hero" id="despre">
-    <div class="wrap hero-inner reveal">
-      <div class="eyebrow"><span class="dot"></span>Disponibil pentru oportunități</div>
-      <h1>CÎRDEI DAVID-ANDREI</h1>
-      <p class="role"><span class="role-static">Organizat · Motivat ·</span><span class="typing-wrap"><span class="typed" id="typed" aria-live="polite"></span><span class="cursor" aria-hidden="true"></span></span></p>
-      <p class="intro">Am 20 de ani și caut un loc de muncă stabil și de lungă durată, în program de 8h, 6h sau 4h. Sunt de asemenea deschis la colaborări pe proiecte scurte sau freelancing.</p>
-      <div class="actions"><a class="btn primary" href="#contact">Contactează-mă →</a><a class="btn" href="javascript:window.print()">Descarcă / Printează CV</a></div>
+<main class="game">
+  <header>
+    <h1>🐍 Snake</h1>
+    <div class="stats">
+      <div class="stat"><span>Score</span><strong id="score">0</strong></div>
+      <div class="stat"><span>Best</span><strong id="best">0</strong></div>
     </div>
   </header>
-  <main class="wrap">
-    <section id="calitati" class="reveal">
-      <div class="section-head"><h2>Calități</h2><p>Lucrez responsabil, învăț repede și mă adaptez ușor la cerințele unui proiect sau ale unei echipe.</p></div>
-      <div class="grid">
-        <article class="card"><h3>01 — Seriozitate</h3><div class="item"><div class="item-title">Persoană organizată, serioasă și de încredere</div><p>Abordez responsabil orice sarcină și respect termenele stabilite.</p></div><div class="item"><div class="item-title">Atenție la detalii</div><p>Îmi place să verific munca înainte de livrare și să păstrez lucrurile clare și ordonate.</p></div></article>
-        <article class="card"><h3>02 — Adaptabilitate</h3><div class="item"><div class="item-title">Capacitate foarte bună de învățare</div><p>Învăț rapid lucruri noi și mă adaptez ușor la cerințele proiectelor.</p></div><div class="item"><div class="item-title">Comunicare</div><p>Comunic clar și eficient, atât în echipă, cât și în relația cu clienții.</p></div></article>
-      </div>
-    </section>
-    <section id="competente" class="reveal">
-      <div class="section-head"><h2>Competențe</h2><p>Instrumente digitale, limba engleză, AI și design grafic.</p></div>
-      <div class="grid">
-        <article class="card"><h3>Digital &amp; Office</h3><div class="skill"><div class="skill-top"><span>Google Sheets</span><span>85%</span></div><div class="bar"><div class="fill" data-width="85%"></div></div></div><div class="skill"><div class="skill-top"><span>Microsoft Excel</span><span>85%</span></div><div class="bar"><div class="fill" data-width="85%"></div></div></div><div class="skill"><div class="skill-top"><span>Google Docs / Word</span><span>80%</span></div><div class="bar"><div class="fill" data-width="80%"></div></div></div></article>
-        <article class="card"><h3>Creative &amp; AI</h3><div class="skill"><div class="skill-top"><span>Limba engleză</span><span>100%</span></div><div class="bar"><div class="fill" data-width="100%"></div></div></div><div class="item"><div class="item-title">Inteligență Artificială (AI)</div><p>Experiență în utilizarea tool-urilor AI pentru a crește eficiența și calitatea muncii.</p></div><div class="item"><div class="item-title">Design grafic</div><p>Crearea de materiale pentru social media — postări și bannere.</p></div></article>
-      </div>
-    </section>
-    <section id="experienta" class="reveal">
-      <div class="section-head"><h2>Profil profesional</h2></div>
-      <article class="card"><div class="item"><div class="item-title">Rolul potrivit</div><p>Sunt interesat de poziții în care pot folosi organizarea, lucrul cu documente și foi de calcul, comunicarea, instrumentele AI și abilitățile creative.</p></div><div class="item"><div class="item-title">Program flexibil</div><p>Disponibil pentru program de 8h, 6h sau 4h.</p></div><div class="item"><div class="item-title">Colaborări</div><p>Deschis la proiecte scurte și freelancing.</p></div></article>
-    </section>
-    <section id="contact" class="reveal">
-      <div class="section-head"><h2>Hai să discutăm</h2><p>Pentru o oportunitate de angajare sau colaborare, mă poți contacta direct.</p></div>
-      <div class="contact"><a href="mailto:davidflakesa@gmail.com"><small>Email</small>davidflakesa@gmail.com</a><a href="#"><small>Facebook</small>David Flake</a><a href="tel:0771646376"><small>Telefon</small>0 771 646 376</a></div>
-    </section>
-  </main>
-  <footer>© 2026 Cirdei David-Andrei · CV Online</footer>
-  <script>
-    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('visible');
-      entry.target.querySelectorAll('.fill').forEach(fill => { fill.style.width = fill.dataset.width; fill.style.setProperty('--print-width', fill.dataset.width); });
-      observer.unobserve(entry.target);
-    }), { threshold: .12 });
-    document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
 
-    const words = ['dedicat', 'responsabil', 'adaptabil', 'orientat spre rezultate'];
-    const typed = document.getElementById('typed');
-    let wordIndex = 0, characterIndex = 0, deleting = false;
-    function type() {
-      const word = words[wordIndex];
-      typed.textContent = deleting ? word.slice(0, characterIndex--) : word.slice(0, characterIndex++);
-      let delay = deleting ? 45 : 85;
-      if (!deleting && characterIndex > word.length) { deleting = true; delay = 1200; }
-      if (deleting && characterIndex < 0) { deleting = false; wordIndex = (wordIndex + 1) % words.length; characterIndex = 0; delay = 350; }
-      window.setTimeout(type, delay);
+  <section class="board-wrap">
+    <canvas id="board" width="600" height="600" aria-label="Snake game board"></canvas>
+
+    <div id="overlay" class="overlay">
+      <div class="message">
+        <h2 id="overlayTitle">Snake</h2>
+        <p id="overlayText">Eat the food. Don't hit the walls or yourself.</p>
+        <button id="startBtn" class="primary">Start Game</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="hint">Arrow keys / WASD to move · Space to pause</div>
+    <button id="pauseBtn" class="pause">Pause</button>
+  </div>
+
+  <div class="dpad" aria-label="Touch controls">
+    <button class="up" data-dir="up" aria-label="Up">▲</button>
+    <button class="left" data-dir="left" aria-label="Left">◀</button>
+    <button class="down" data-dir="down" aria-label="Down">▼</button>
+    <button class="right" data-dir="right" aria-label="Right">▶</button>
+  </div>
+</main>
+
+<script>
+(() => {
+  const canvas = document.getElementById("board");
+  const ctx = canvas.getContext("2d");
+  const scoreEl = document.getElementById("score");
+  const bestEl = document.getElementById("best");
+  const overlay = document.getElementById("overlay");
+  const overlayTitle = document.getElementById("overlayTitle");
+  const overlayText = document.getElementById("overlayText");
+  const startBtn = document.getElementById("startBtn");
+  const pauseBtn = document.getElementById("pauseBtn");
+
+  const GRID = 20;
+  const CELL = canvas.width / GRID;
+
+  let snake, food, direction, nextDirection;
+  let score = 0;
+  let best = Number(localStorage.getItem("snakeBest") || 0);
+  let running = false;
+  let paused = false;
+  let gameOver = false;
+  let timer = null;
+  let speed = 145;
+
+  bestEl.textContent = best;
+
+  function reset() {
+    snake = [
+      {x: 10, y: 10},
+      {x: 9, y: 10},
+      {x: 8, y: 10}
+    ];
+    direction = {x: 1, y: 0};
+    nextDirection = {x: 1, y: 0};
+    score = 0;
+    speed = 145;
+    scoreEl.textContent = score;
+    food = makeFood();
+    running = true;
+    paused = false;
+    gameOver = false;
+    hideOverlay();
+    pauseBtn.textContent = "Pause";
+    restartLoop();
+    draw();
+  }
+
+  function makeFood() {
+    let pos;
+    do {
+      pos = {
+        x: Math.floor(Math.random() * GRID),
+        y: Math.floor(Math.random() * GRID)
+      };
+    } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+    return pos;
+  }
+
+  function restartLoop() {
+    clearInterval(timer);
+    if (running && !paused) timer = setInterval(tick, speed);
+  }
+
+  function tick() {
+    direction = nextDirection;
+
+    const head = {
+      x: snake[0].x + direction.x,
+      y: snake[0].y + direction.y
+    };
+
+    const hitWall =
+      head.x < 0 || head.x >= GRID ||
+      head.y < 0 || head.y >= GRID;
+
+    const eating = head.x === food.x && head.y === food.y;
+    const bodyToCheck = eating ? snake : snake.slice(0, -1);
+    const hitSelf = bodyToCheck.some(s => s.x === head.x && s.y === head.y);
+
+    if (hitWall || hitSelf) {
+      endGame();
+      return;
     }
-    type();
 
-  </script>
+    snake.unshift(head);
+
+    if (eating) {
+      score++;
+      scoreEl.textContent = score;
+
+      if (score > best) {
+        best = score;
+        bestEl.textContent = best;
+        localStorage.setItem("snakeBest", best);
+      }
+
+      food = makeFood();
+      speed = Math.max(55, 145 - score * 4);
+      restartLoop();
+    } else {
+      snake.pop();
+    }
+
+    draw();
+  }
+
+  function endGame() {
+    running = false;
+    gameOver = true;
+    clearInterval(timer);
+    overlayTitle.textContent = "Game Over";
+    overlayText.textContent = `Score: ${score} · Best: ${best}`;
+    startBtn.textContent = "Play Again";
+    overlay.classList.remove("hidden");
+    draw();
+  }
+
+  function setDirection(dir) {
+    if (!running || paused) return;
+
+    const dirs = {
+      up:    {x: 0, y: -1},
+      down:  {x: 0, y: 1},
+      left:  {x: -1, y: 0},
+      right: {x: 1, y: 0}
+    };
+
+    const candidate = dirs[dir];
+    if (!candidate) return;
+
+    // Prevent an immediate 180-degree turn.
+    if (candidate.x === -direction.x && candidate.y === -direction.y) return;
+    nextDirection = candidate;
+  }
+
+  function togglePause() {
+    if (!running && !gameOver) {
+      reset();
+      return;
+    }
+    if (!running) return;
+
+    paused = !paused;
+    pauseBtn.textContent = paused ? "Resume" : "Pause";
+
+    if (paused) {
+      clearInterval(timer);
+      overlayTitle.textContent = "Paused";
+      overlayText.textContent = "Take a breather. Press Space or Resume when you're ready.";
+      startBtn.textContent = "Resume";
+      overlay.classList.remove("hidden");
+    } else {
+      hideOverlay();
+      restartLoop();
+      draw();
+    }
+  }
+
+  function hideOverlay() {
+    overlay.classList.add("hidden");
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Food glow
+    const fx = (food.x + 0.5) * CELL;
+    const fy = (food.y + 0.5) * CELL;
+    const glow = ctx.createRadialGradient(fx, fy, 2, fx, fy, CELL * .65);
+    glow.addColorStop(0, "rgba(255, 93, 115, .35)");
+    glow.addColorStop(1, "rgba(255, 93, 115, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(fx - CELL, fy - CELL, CELL * 2, CELL * 2);
+
+    // Food
+    ctx.fillStyle = "#ff5d73";
+    ctx.beginPath();
+    ctx.arc(fx, fy, CELL * .29, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#8ef28f";
+    ctx.beginPath();
+    ctx.ellipse(fx + CELL * .13, fy - CELL * .27, CELL * .12, CELL * .06, -.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Snake
+    snake.forEach((part, i) => {
+      const pad = i === 0 ? 1.5 : 2.5;
+      const x = part.x * CELL + pad;
+      const y = part.y * CELL + pad;
+      const size = CELL - pad * 2;
+
+      ctx.fillStyle = i === 0 ? "#b4ff73" : "#65e572";
+      roundRect(ctx, x, y, size, size, i === 0 ? 7 : 5);
+      ctx.fill();
+
+      if (i === 0) {
+        // Eyes
+        ctx.fillStyle = "#0b1020";
+        const eyeSize = CELL * .07;
+        let ex1, ey1, ex2, ey2;
+
+        if (direction.x !== 0) {
+          const side = direction.x > 0 ? .68 : .32;
+          ex1 = x + size * side;
+          ex2 = ex1;
+          ey1 = y + size * .31;
+          ey2 = y + size * .69;
+        } else {
+          const side = direction.y > 0 ? .68 : .32;
+          ey1 = ey2 = y + size * side;
+          ex1 = x + size * .31;
+          ex2 = x + size * .69;
+        }
+
+        ctx.beginPath();
+        ctx.arc(ex1, ey1, eyeSize, 0, Math.PI * 2);
+        ctx.arc(ex2, ey2, eyeSize, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    const radius = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + w, y, x + w, y + h, radius);
+    ctx.arcTo(x + w, y + h, x, y + h, radius);
+    ctx.arcTo(x, y + h, x, y, radius);
+    ctx.arcTo(x, y, x + w, y, radius);
+    ctx.closePath();
+  }
+
+  document.addEventListener("keydown", e => {
+    const key = e.key.toLowerCase();
+
+    const map = {
+      arrowup: "up", w: "up",
+      arrowdown: "down", s: "down",
+      arrowleft: "left", a: "left",
+      arrowright: "right", d: "right"
+    };
+
+    if (map[key]) {
+      e.preventDefault();
+      if (!running && !gameOver) reset();
+      setDirection(map[key]);
+    }
+
+    if (key === " ") {
+      e.preventDefault();
+      togglePause();
+    }
+
+    if (key === "enter" && gameOver) reset();
+  });
+
+  document.querySelectorAll(".dpad button").forEach(btn => {
+    btn.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      if (!running && !gameOver) reset();
+      setDirection(btn.dataset.dir);
+    });
+  });
+
+  startBtn.addEventListener("click", () => {
+    if (paused) togglePause();
+    else reset();
+  });
+
+  pauseBtn.addEventListener("click", togglePause);
+
+  // Swipe controls on the board.
+  let touchStart = null;
+  canvas.addEventListener("pointerdown", e => {
+    touchStart = {x: e.clientX, y: e.clientY};
+  });
+  canvas.addEventListener("pointerup", e => {
+    if (!touchStart) return;
+    const dx = e.clientX - touchStart.x;
+    const dy = e.clientY - touchStart.y;
+    touchStart = null;
+
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      setDirection(dx > 0 ? "right" : "left");
+    } else {
+      setDirection(dy > 0 ? "down" : "up");
+    }
+  });
+
+  // Initial screen.
+  snake = [
+    {x: 10, y: 10},
+    {x: 9, y: 10},
+    {x: 8, y: 10}
+  ];
+  food = {x: 14, y: 10};
+  direction = {x: 1, y: 0};
+  nextDirection = {x: 1, y: 0};
+  draw();
+})();
+</script>
 </body>
 </html>
